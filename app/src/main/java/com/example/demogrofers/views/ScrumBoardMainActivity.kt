@@ -7,6 +7,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import com.example.demogrofers.ConnectionUtils
 import com.example.demogrofers.R
 import com.example.demogrofers.ScrumBoardApplication
@@ -17,6 +18,7 @@ import com.example.demogrofers.repository.ScrumBoardRepository
 import com.example.demogrofers.utils.FilterStates
 import com.example.demogrofers.viewmodel.ScrumBoardViewModel
 import io.reactivex.disposables.CompositeDisposable
+import java.io.Serializable
 
 class ScrumBoardMainActivity : AppCompatActivity() {
 
@@ -26,6 +28,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
     private val disposable = CompositeDisposable()
     private lateinit var repository: ScrumBoardRepository
     private var checkedStatesStringArray: ArrayList<String> = ArrayList()
+    private var hashmapTaskPost = HashMap<String, String>()
 
     companion object {
         const val REQUEST_CODE_FILTER_ACTIVITY = 9
@@ -65,6 +68,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
                 .subscribe(
                     {
                         scrumBoardViewModel.handleSuccessResponse()
+                        Log.d("response", "response received")
 
                         val checkedTasksArrayList = ArrayList<Task>()
                         for(mapStatus in it) {
@@ -76,6 +80,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
                         taskListAdapter?.setItems(checkedTasksArrayList)
                     },
                     {
+                        Log.d("response", " no response" + it)
                         scrumBoardViewModel.handleFailedResponse()
                         scrumBoardViewModel.noResultState = false
                     }
@@ -112,6 +117,37 @@ class ScrumBoardMainActivity : AppCompatActivity() {
                 }
             }
             getTaskListData()
+        }
+
+        if(requestCode == REQUEST_CODE_NEW_TASK_ACTIVITY && resultCode == Activity.RESULT_OK) {
+            data?.let {
+                val taskToPost:Task = it.getSerializableExtra(CreateNewTaskActivity.HASH_MAP_POST_REQUEST) as Task
+                postTaskData(taskToPost)
+            }
+        }
+    }
+
+    fun postTaskData(taskToPost: Task) {
+        if(ConnectionUtils.isNetConnected(this)) {
+
+            disposable.add(scrumBoardViewModel.sendData(repository, taskToPost)
+                .subscribe(
+                    {
+                        scrumBoardViewModel.handleSuccessResponse()
+                        getTaskListData()
+                        Log.d("response", "" + it)
+                    },
+                    {
+                        scrumBoardViewModel.handleFailedResponse()
+                        scrumBoardViewModel.noResultState = false
+                    }
+                )
+
+            )
+
+        }
+        else {
+            scrumBoardViewModel.handleNoInternetResponse()
         }
     }
 

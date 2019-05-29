@@ -1,7 +1,6 @@
 package com.example.demogrofers.views
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.demogrofers.databinding.RecyclerviewItemBinding
@@ -33,8 +32,6 @@ class TaskListAdapter(
         recyclerViewItemBinding.titleTv.text = task.title
         recyclerViewItemBinding.descriptionTv.text = task.description
         recyclerViewItemBinding.statusTv.text = task.status
-        Log.d("responseAdapter", "" + taskList)
-        Log.d("responsebindAdapter", "" + taskList[position])
     }
 
     override fun getItemCount(): Int {

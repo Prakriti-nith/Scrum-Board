@@ -1,18 +1,30 @@
 package com.example.demogrofers.api
 
 import com.example.demogrofers.model.Task
+import com.example.demogrofers.model.TaskResponse
 import io.reactivex.Single
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.POST
 
 interface ScrumBoardApis {
 
-//    @Headers(
-//        "Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbnVyYWciLCJleHAiOjE1NTk4OTAyNDB9.DzA2KRKqkXPqeLQ9D7V_J1ln8za69VyjC6urRBKn82doX8HW_EV8TOydHC4Axe9_gexb11jqiLmvY93YBre9Zg",
-//        "Access-Control-Allow-Origin: *",
-//        "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
-//    )
-    @GET("5ced4658b4565f19480609a5/1")
+    @Headers(
+        "access_token: 2e3195db-2a60-4544-920b-ab4b0fbdaf5f",
+        "Access-Control-Allow-Origin: *",
+        "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
+    )
+    @GET("tasks")
     fun getAllCurrentTasks(): Single<Map<String, ArrayList<Task>>>
+
+
+    @Headers(
+        "access_token: 2e3195db-2a60-4544-920b-ab4b0fbdaf5f",
+        "Access-Control-Allow-Origin: *",
+        "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
+    )
+    @POST("tasks")
+    fun postNewTask(@Body task: Task): Single<TaskResponse>
 
 }

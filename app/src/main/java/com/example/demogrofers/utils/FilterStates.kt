@@ -8,4 +8,9 @@ object FilterStates {
     const val TESTING = "testing"
     const val PRODUCTION = "production"
 
+    const val DESCRIPTION = "description"
+    const val TITLE = "title"
+    const val STATUS = "status"
+
+
 }

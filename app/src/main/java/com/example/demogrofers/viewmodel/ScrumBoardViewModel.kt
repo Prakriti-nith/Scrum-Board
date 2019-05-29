@@ -2,6 +2,7 @@ package com.example.demogrofers.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import com.example.demogrofers.model.Task
+import com.example.demogrofers.model.TaskResponse
 import com.example.demogrofers.repository.ScrumBoardRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,11 +21,17 @@ class ScrumBoardViewModel: ViewModel() {
     }
 
     fun loadData(repository: ScrumBoardRepository): Single<Map<String, ArrayList<Task>>> {
-
         progressState = true
         return repository.getScrumBoardRepository()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun sendData(repository: ScrumBoardRepository, taskToSend: Task): Single<TaskResponse> {
+        progressState = true
+        return repository.postNewTask(taskToSend)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
     }
 
     fun handleSuccessResponse() {

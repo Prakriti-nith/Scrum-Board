@@ -8,8 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ScrumBoardApplication: Application() {
 
     companion object {
-//        private const val BASE_URL="http://192.168.36.64:8080/user/"
-        private const val BASE_URL="https://api.jsonbin.io/b/"
+        private const val BASE_URL="http://192.168.36.64:8080/user/"
         private  var retrofit: Retrofit =  Retrofit.Builder()
                                         .baseUrl(BASE_URL)
                                         .addConverterFactory(GsonConverterFactory.create())

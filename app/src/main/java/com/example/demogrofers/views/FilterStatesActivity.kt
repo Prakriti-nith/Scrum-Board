@@ -46,11 +46,10 @@ class FilterStatesActivity : AppCompatActivity() {
 
     private fun markCheckbox(checkBox: CheckBox, state: String) {
         if(state in checkedStates) {
-            checkBox.setChecked(true)
-//            checkBox.checked = true
+            checkBox.isChecked = true
         }
         else {
-            checkBox.setChecked(false)
+            checkBox.isChecked = false
         }
     }
 
@@ -64,7 +63,6 @@ class FilterStatesActivity : AppCompatActivity() {
             filterState(activityFilterStatesBinding.chkProduction, FilterStates.PRODUCTION)
 
             val intent = Intent(this@FilterStatesActivity, ScrumBoardMainActivity::class.java)
-            Log.d("responseFilter", "" + checkedStates)
             intent.putStringArrayListExtra(CHECKED_STATES_STRING_ARRAY, checkedStates)
             setResult(Activity.RESULT_OK, intent)
             finish()
