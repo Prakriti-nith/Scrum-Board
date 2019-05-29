@@ -12,7 +12,7 @@ interface ScrumBoardApis {
 //        "Access-Control-Allow-Origin: *",
 //        "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
 //    )
-    @GET("5ced4658b4565f19480609a5")
+    @GET("5ced4658b4565f19480609a5/1")
     fun getAllCurrentTasks(): Single<Map<String, ArrayList<Task>>>
 
 }

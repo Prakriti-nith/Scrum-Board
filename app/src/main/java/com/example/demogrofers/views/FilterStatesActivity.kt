@@ -6,15 +6,20 @@ import android.databinding.DataBindingUtil
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.CheckBox
 import com.example.demogrofers.R
 import com.example.demogrofers.databinding.ActivityFilterStatesBinding
-import com.example.demogrofers.viewmodel.FilterStatesViewModel
+import com.example.demogrofers.utils.FilterStates
 
 class FilterStatesActivity : AppCompatActivity() {
 
     private lateinit var activityFilterStatesBinding: ActivityFilterStatesBinding
-    private var checkedStates = ArrayList<String>()
+    private var checkedStates: ArrayList<String> = ArrayList()
+
+    companion object {
+        const val CHECKED_STATES_STRING_ARRAY = "checkedStatesStringArray"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,57 +28,52 @@ class FilterStatesActivity : AppCompatActivity() {
         initialize()
         setListener()
 
-        markCheckBoxes()
-    }
-
-    private fun markCheckBoxes() {
-        var intent = getIntent()
-        if(!intent.getBooleanExtra("firstTime", true)) {
-            checkedStates = intent.getStringArrayListExtra("checkedCheckBoxes")
-        }
-
-        markCheckbox(activityFilterStatesBinding.chkRejected, "rejected")
-        markCheckbox(activityFilterStatesBinding.chkPending, "pending")
-        markCheckbox(activityFilterStatesBinding.chkDevelopment, "development")
-        markCheckbox(activityFilterStatesBinding.chkTesting, "testing")
-        markCheckbox(activityFilterStatesBinding.chkProduction, "production")
-    }
-
-    private fun markCheckbox(checkBox: CheckBox, state: String) {
-        if(state in checkedStates) {
-            checkBox.setChecked(true);
-        }
-        else {
-            checkBox.setChecked(false);
-        }
     }
 
     private fun initialize() {
         val actionbar = supportActionBar
         actionbar?.setDisplayHomeAsUpEnabled(true)
-        actionbar?.setDisplayHomeAsUpEnabled(true)
+
+        val intent = intent
+        checkedStates = intent.getStringArrayListExtra(CHECKED_STATES_STRING_ARRAY)
+
+        markCheckbox(activityFilterStatesBinding.chkRejected, FilterStates.REJECTED)
+        markCheckbox(activityFilterStatesBinding.chkPending, FilterStates.PENDING)
+        markCheckbox(activityFilterStatesBinding.chkDevelopment, FilterStates.DEVELOPMENT)
+        markCheckbox(activityFilterStatesBinding.chkTesting, FilterStates.TESTING)
+        markCheckbox(activityFilterStatesBinding.chkProduction, FilterStates.PRODUCTION)
     }
 
-    private fun filterState(checkBox: CheckBox, taskState: String) {
-        if(checkBox.isChecked) {
-            checkedStates.add(taskState)
+    private fun markCheckbox(checkBox: CheckBox, state: String) {
+        if(state in checkedStates) {
+            checkBox.setChecked(true)
+//            checkBox.checked = true
+        }
+        else {
+            checkBox.setChecked(false)
         }
     }
 
     private fun setListener() {
         activityFilterStatesBinding.btnDisplay.setOnClickListener {
-
-            filterState(activityFilterStatesBinding.chkRejected, "rejected")
-            filterState(activityFilterStatesBinding.chkPending, "pending")
-            filterState(activityFilterStatesBinding.chkDevelopment, "development")
-            filterState(activityFilterStatesBinding.chkTesting, "testing")
-            filterState(activityFilterStatesBinding.chkProduction, "production")
+            checkedStates.clear()
+            filterState(activityFilterStatesBinding.chkRejected, FilterStates.REJECTED)
+            filterState(activityFilterStatesBinding.chkPending, FilterStates.PENDING)
+            filterState(activityFilterStatesBinding.chkDevelopment, FilterStates.DEVELOPMENT)
+            filterState(activityFilterStatesBinding.chkTesting, FilterStates.TESTING)
+            filterState(activityFilterStatesBinding.chkProduction, FilterStates.PRODUCTION)
 
             val intent = Intent(this@FilterStatesActivity, ScrumBoardMainActivity::class.java)
-            intent.putStringArrayListExtra("checkedCheckBoxes", checkedStates)
-            intent.putExtra("fromFilterActivity", true)
+            Log.d("responseFilter", "" + checkedStates)
+            intent.putStringArrayListExtra(CHECKED_STATES_STRING_ARRAY, checkedStates)
             setResult(Activity.RESULT_OK, intent)
             finish()
+        }
+    }
+
+    private fun filterState(checkBox: CheckBox, taskState: String) {
+        if(checkBox.isChecked) {
+            checkedStates.add(taskState)
         }
     }
 

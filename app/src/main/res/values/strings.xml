@@ -26,7 +26,20 @@
     <string name="title">Title</string>
     <string name="status">Status</string>
     <string name="description">Description</string>
-    <string name="filter_underline"><u>Filter</u></string>
+    <string name="filter_underline">
+        <u>Filter</u>
+    </string>
+    <string name="createTask">Create new Task</string>
+    <string name="save">Save</string>
+
+    <string-array name="states">
+        <item>Select the status of task</item>
+        <item>REJECTED</item>
+        <item>PENDING</item>
+        <item>DEVELOPMENT</item>
+        <item>TESTING</item>
+        <item>PRODUCTION</item>
+    </string-array>
 
 
 </resources>
