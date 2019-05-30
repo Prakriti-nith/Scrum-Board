@@ -9,26 +9,29 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.example.demogrofers.ConnectionUtils
-import com.example.demogrofers.R
-import com.example.demogrofers.ScrumBoardApplication
-import com.example.demogrofers.api.ScrumBoardApis
 import com.example.demogrofers.databinding.ActivityMainBinding
 import com.example.demogrofers.model.Task
-import com.example.demogrofers.repository.ScrumBoardRepository
 import com.example.demogrofers.utils.FilterStates
 import com.example.demogrofers.viewmodel.ScrumBoardViewModel
+import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
-import java.io.Serializable
+import javax.inject.Inject
+import com.example.demogrofers.viewmodel.ViewModelFactory
+
 
 class ScrumBoardMainActivity : AppCompatActivity() {
 
     private lateinit var activityMainBinding: ActivityMainBinding
-    private lateinit var scrumBoardViewModel: ScrumBoardViewModel
+
+    lateinit var scrumBoardViewModel: ScrumBoardViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     private var taskListAdapter: TaskListAdapter? = null
     private val disposable = CompositeDisposable()
-    private lateinit var repository: ScrumBoardRepository
+   // private lateinit var repository: ScrumBoardRepository
     private var checkedStatesStringArray: ArrayList<String> = ArrayList()
-    private var hashmapTaskPost = HashMap<String, String>()
 
     companion object {
         const val REQUEST_CODE_FILTER_ACTIVITY = 9
@@ -36,14 +39,18 @@ class ScrumBoardMainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
-        scrumBoardViewModel = ViewModelProviders.of(this).get(ScrumBoardViewModel::class.java)
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        activityMainBinding.viewModel = ScrumBoardViewModel()
+
+        initializeViewModel()
+//        scrumBoardViewModel = ViewModelProviders.of(this).get(ScrumBoardViewModel::class.java)
+        activityMainBinding = DataBindingUtil.setContentView(this, com.example.demogrofers.R.layout.activity_main)
+        activityMainBinding.viewModel = scrumBoardViewModel
 
         setListener()
 
-        repository = ScrumBoardRepository(ScrumBoardApplication.getRetrofitInstance().create(ScrumBoardApis::class.java))
+       // repository = ScrumBoardRepository(ScrumBoardApplication.getRetrofitInstance().create(ScrumBoardApis::class.java))
         taskListAdapter = TaskListAdapter()
         activityMainBinding.appBar.mainContent.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         activityMainBinding.appBar.mainContent.recyclerView.adapter = taskListAdapter
@@ -51,6 +58,10 @@ class ScrumBoardMainActivity : AppCompatActivity() {
         populateCheckedStatesArrayList()
         getTaskListData()
 
+    }
+
+    private fun initializeViewModel() {
+        scrumBoardViewModel = ViewModelProviders.of(this, viewModelFactory).get(ScrumBoardViewModel::class.java)
     }
 
     private fun populateCheckedStatesArrayList() {
@@ -64,7 +75,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
     private fun getTaskListData() {
         if(ConnectionUtils.isNetConnected(this)) {
 
-            disposable.add(scrumBoardViewModel.loadData(repository)
+            disposable.add(scrumBoardViewModel.loadData()
                 .subscribe(
                     {
                         scrumBoardViewModel.handleSuccessResponse()
@@ -82,7 +93,6 @@ class ScrumBoardMainActivity : AppCompatActivity() {
                     {
                         Log.d("response", " no response" + it)
                         scrumBoardViewModel.handleFailedResponse()
-                        scrumBoardViewModel.noResultState = false
                     }
                 )
 
@@ -130,7 +140,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
     fun postTaskData(taskToPost: Task) {
         if(ConnectionUtils.isNetConnected(this)) {
 
-            disposable.add(scrumBoardViewModel.sendData(repository, taskToPost)
+            disposable.add(scrumBoardViewModel.sendData(taskToPost)
                 .subscribe(
                     {
                         scrumBoardViewModel.handleSuccessResponse()
@@ -139,7 +149,6 @@ class ScrumBoardMainActivity : AppCompatActivity() {
                     },
                     {
                         scrumBoardViewModel.handleFailedResponse()
-                        scrumBoardViewModel.noResultState = false
                     }
                 )
 

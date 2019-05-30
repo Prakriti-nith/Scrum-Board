@@ -1,22 +1,27 @@
 package com.example.demogrofers
 
+import android.app.Activity
 import android.app.Application
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.demogrofers.component.DaggerApplicationComponent
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
+import javax.inject.Inject
 
-class ScrumBoardApplication: Application() {
+class ScrumBoardApplication: Application(), HasActivityInjector {
 
-    companion object {
-        private const val BASE_URL="http://192.168.36.64:8080/user/"
-        private  var retrofit: Retrofit =  Retrofit.Builder()
-                                        .baseUrl(BASE_URL)
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                                        .build()
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
+    override fun activityInjector(): DispatchingAndroidInjector<Activity>? {
+        return dispatchingAndroidInjector
+    }
 
-        fun getRetrofitInstance() = retrofit
+    override fun onCreate() {
+        super.onCreate()
+        DaggerApplicationComponent.builder()
+            .application(this)
+            .build()
+            .inject(this)
     }
 
 }
