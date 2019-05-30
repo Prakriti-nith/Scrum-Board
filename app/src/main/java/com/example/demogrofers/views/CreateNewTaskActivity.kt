@@ -10,7 +10,8 @@ import android.view.View
 import com.example.demogrofers.R
 import com.example.demogrofers.databinding.ActivityCreateNewTaskBinding
 import com.example.demogrofers.model.Task
-import com.example.demogrofers.utils.FilterStates
+import android.view.MenuItem
+
 
 class CreateNewTaskActivity : AppCompatActivity() {
 
@@ -35,6 +36,16 @@ class CreateNewTaskActivity : AppCompatActivity() {
         actionbar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun setListeners() {
         activityCreateNewTaskBinding.saveBtn.setOnClickListener {
             sendDataBack(it)
@@ -51,7 +62,7 @@ class CreateNewTaskActivity : AppCompatActivity() {
         }
         else {
 
-            var taskToPost = Task(title, description, status)
+            val taskToPost = Task(title, description, status)
 
             val intent = Intent(this@CreateNewTaskActivity, ScrumBoardMainActivity::class.java)
             intent.putExtra(HASH_MAP_POST_REQUEST, taskToPost)

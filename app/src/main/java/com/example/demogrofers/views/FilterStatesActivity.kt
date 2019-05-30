@@ -45,12 +45,7 @@ class FilterStatesActivity : AppCompatActivity() {
     }
 
     private fun markCheckbox(checkBox: CheckBox, state: String) {
-        if(state in checkedStates) {
-            checkBox.isChecked = true
-        }
-        else {
-            checkBox.isChecked = false
-        }
+        checkBox.isChecked = state in checkedStates
     }
 
     private fun setListener() {
