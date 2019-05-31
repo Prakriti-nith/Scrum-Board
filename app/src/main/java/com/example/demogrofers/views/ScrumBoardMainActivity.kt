@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.example.demogrofers.ConnectionUtils
+import com.example.demogrofers.R
 import com.example.demogrofers.databinding.ActivityMainBinding
 import com.example.demogrofers.model.Task
 import com.example.demogrofers.utils.FilterStates
@@ -17,6 +18,10 @@ import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import com.example.demogrofers.viewmodel.ViewModelFactory
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import android.view.KeyEvent
+import com.example.demogrofers.model.TaskToSearch
 
 
 class ScrumBoardMainActivity : AppCompatActivity() {
@@ -43,24 +48,22 @@ class ScrumBoardMainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        initializeViewModel()
-//        scrumBoardViewModel = ViewModelProviders.of(this).get(ScrumBoardViewModel::class.java)
-        activityMainBinding = DataBindingUtil.setContentView(this, com.example.demogrofers.R.layout.activity_main)
+        initialize()
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         activityMainBinding.viewModel = scrumBoardViewModel
-
-        setListener()
 
        // repository = ScrumBoardRepository(ScrumBoardApplication.getRetrofitInstance().create(ScrumBoardApis::class.java))
         taskListAdapter = TaskListAdapter()
         activityMainBinding.appBar.mainContent.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         activityMainBinding.appBar.mainContent.recyclerView.adapter = taskListAdapter
 
+        setListener()
         populateCheckedStatesArrayList()
         getTaskListData()
 
     }
 
-    private fun initializeViewModel() {
+    private fun initialize() {
         scrumBoardViewModel = ViewModelProviders.of(this, viewModelFactory).get(ScrumBoardViewModel::class.java)
     }
 
@@ -79,14 +82,12 @@ class ScrumBoardMainActivity : AppCompatActivity() {
                     {
                         scrumBoardViewModel.handleSuccessResponse()
                         Log.d("response", "response received")
-
                         val checkedTasksArrayList = ArrayList<Task>()
                         for(mapStatus in it) {
                             if(mapStatus.key.toLowerCase() in checkedStatesStringArray) {
                                 checkedTasksArrayList.addAll(ArrayList(mapStatus.value))
                             }
                         }
-
                         taskListAdapter?.setItems(checkedTasksArrayList)
                     },
                     {
@@ -112,8 +113,46 @@ class ScrumBoardMainActivity : AppCompatActivity() {
             val intent = Intent(this@ScrumBoardMainActivity, CreateNewTaskActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_NEW_TASK_ACTIVITY)
         }
+        activityMainBinding.appBar.searchet.setOnEditorActionListener { v: TextView, actionId: Int, event: KeyEvent? ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                Log.d("search", "button clicked")
+                postTaskByName(TaskToSearch(activityMainBinding.appBar.searchet.text.toString()))
+                true
+            }
+            false
+        }
     }
 
+    private fun postTaskByName(taskToSearch: TaskToSearch) {
+        if(ConnectionUtils.isNetConnected(this)) {
+
+            disposable.add(scrumBoardViewModel.sendData(taskToSearch)
+                .subscribe(
+                    {
+                        scrumBoardViewModel.handleSuccessResponse()
+                        Log.d("search", "response received")
+                        val tasksArrayList = ArrayList<Task>()
+                        for(mapStatus in it) {
+                            if(mapStatus.value.isNotEmpty()) {
+                                tasksArrayList.addAll(ArrayList(mapStatus.value))
+                            }
+                        }
+                        Log.d("searchresponse", "Search Response: "+ tasksArrayList)
+                        taskListAdapter?.setItems(tasksArrayList)
+                    },
+                    {
+                        scrumBoardViewModel.handleFailedResponse()
+                        Log.d("response", "" + it)
+                    }
+                )
+
+            )
+
+        }
+        else {
+            scrumBoardViewModel.handleNoInternetResponse()
+        }
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

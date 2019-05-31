@@ -22,5 +22,5 @@ abstract class ScrumBoardViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(ScrumBoardViewModel::class)
-    protected abstract fun scrumBoardViewModel(scrumBoardViewModel: ScrumBoardViewModel): ViewModel
+    abstract fun scrumBoardViewModel(scrumBoardViewModel: ScrumBoardViewModel): ViewModel
 }

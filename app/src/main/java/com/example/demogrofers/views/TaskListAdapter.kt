@@ -1,6 +1,7 @@
 package com.example.demogrofers.views
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.demogrofers.databinding.RecyclerviewItemBinding
@@ -15,7 +16,8 @@ class TaskListAdapter(
     fun setItems(taskLis: ArrayList<Task>?) {
         taskLis?.let {
             taskList.clear()
-            taskList.addAll(taskLis)
+            taskList.addAll(it)
+            Log.d("searchresponseList", "Search Response: "+ taskList)
             notifyDataSetChanged()
         }
     }
@@ -29,6 +31,7 @@ class TaskListAdapter(
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val task = taskList[position]
         val recyclerViewItemBinding = viewHolder.recyclerviewItemBinding
+        Log.d("searchresponseTask", "Search Response: "+ task)
         recyclerViewItemBinding.titleTv.text = task.title
         recyclerViewItemBinding.descriptionTv.text = task.description
         recyclerViewItemBinding.statusTv.text = task.status

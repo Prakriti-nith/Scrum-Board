@@ -6,6 +6,7 @@ import com.example.demogrofers.model.Task
 import com.example.demogrofers.model.TaskResponse
 import com.example.demogrofers.repository.ScrumBoardRepository
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class CreateNewTaskViewModel @Inject constructor(val repository: ScrumBoardRepos
         progressState.set(true)
         return repository.postNewTask(taskToSend)
             .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun handleSuccessResponse() {

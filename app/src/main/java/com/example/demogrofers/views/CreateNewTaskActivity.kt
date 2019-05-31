@@ -4,6 +4,8 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -49,7 +51,9 @@ class CreateNewTaskActivity : AppCompatActivity() {
 
     private fun initialize() {
         val actionbar = supportActionBar
+        actionbar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#0E1227")))
         actionbar?.setDisplayHomeAsUpEnabled(true)
+
 
         createNewTaskViewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateNewTaskViewModel::class.java)
     }

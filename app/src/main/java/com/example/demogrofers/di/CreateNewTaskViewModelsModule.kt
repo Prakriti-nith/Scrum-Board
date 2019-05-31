@@ -22,5 +22,5 @@ abstract class CreateNewTaskViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(CreateNewTaskViewModel::class)
-    protected abstract fun createNewTaskViewModel(createNewTaskViewModel: CreateNewTaskViewModel): ViewModel
+    abstract fun createNewTaskViewModel(createNewTaskViewModel: CreateNewTaskViewModel): ViewModel
 }

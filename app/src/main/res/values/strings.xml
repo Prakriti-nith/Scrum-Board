@@ -31,6 +31,7 @@
     </string>
     <string name="createTask">Create new Task</string>
     <string name="save">Save</string>
+    <string name="searchTask">Search a task</string>
 
     <string-array name="states">
         <item>Select the status of task</item>

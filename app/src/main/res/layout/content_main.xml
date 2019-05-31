@@ -15,11 +15,11 @@
     </data>
 
     <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:showIn="@layout/app_bar_main"
+            android:background="#292936"
             tools:context=".views.ScrumBoardMainActivity">
 
         <TextView

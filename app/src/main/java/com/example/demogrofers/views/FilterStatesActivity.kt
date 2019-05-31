@@ -3,6 +3,8 @@ package com.example.demogrofers.views
 import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -32,6 +34,7 @@ class FilterStatesActivity : AppCompatActivity() {
 
     private fun initialize() {
         val actionbar = supportActionBar
+        actionbar?.setBackgroundDrawable(ColorDrawable(Color.parseColor("#0E1227")))
         actionbar?.setDisplayHomeAsUpEnabled(true)
 
         val intent = intent
