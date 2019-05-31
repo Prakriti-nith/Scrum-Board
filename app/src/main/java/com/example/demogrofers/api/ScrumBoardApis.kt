@@ -11,7 +11,7 @@ import retrofit2.http.POST
 interface ScrumBoardApis {
 
     @Headers(
-        "access_token: 2e3195db-2a60-4544-920b-ab4b0fbdaf5f",
+        "access_token: 56511384-f662-4188-8f7c-ad941b9bd705",
         "Access-Control-Allow-Origin: *",
         "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
     )
@@ -20,7 +20,7 @@ interface ScrumBoardApis {
 
 
     @Headers(
-        "access_token: 2e3195db-2a60-4544-920b-ab4b0fbdaf5f",
+        "access_token: 56511384-f662-4188-8f7c-ad941b9bd705",
         "Access-Control-Allow-Origin: *",
         "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
     )

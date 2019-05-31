@@ -2,7 +2,7 @@ package com.example.demogrofers
 
 import android.app.Activity
 import android.app.Application
-import com.example.demogrofers.component.DaggerApplicationComponent
+import com.example.demogrofers.di.DaggerApplicationComponent
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.example.demogrofers.modules
+package com.example.demogrofers.di
 
 import com.example.demogrofers.api.ScrumBoardApis
 import com.google.gson.Gson
