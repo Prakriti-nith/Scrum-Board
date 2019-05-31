@@ -74,7 +74,6 @@ class ScrumBoardMainActivity : AppCompatActivity() {
 
     private fun getTaskListData() {
         if(ConnectionUtils.isNetConnected(this)) {
-
             disposable.add(scrumBoardViewModel.loadData()
                 .subscribe(
                     {
@@ -95,9 +94,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
                         scrumBoardViewModel.handleFailedResponse()
                     }
                 )
-
             )
-
         }
         else {
             scrumBoardViewModel.handleNoInternetResponse()
@@ -130,33 +127,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
         }
 
         if(requestCode == REQUEST_CODE_NEW_TASK_ACTIVITY && resultCode == Activity.RESULT_OK) {
-            data?.let {
-                val taskToPost:Task = it.getSerializableExtra(CreateNewTaskActivity.HASH_MAP_POST_REQUEST) as Task
-                postTaskData(taskToPost)
-            }
-        }
-    }
-
-    fun postTaskData(taskToPost: Task) {
-        if(ConnectionUtils.isNetConnected(this)) {
-
-            disposable.add(scrumBoardViewModel.sendData(taskToPost)
-                .subscribe(
-                    {
-                        scrumBoardViewModel.handleSuccessResponse()
-                        getTaskListData()
-                        Log.d("response", "" + it)
-                    },
-                    {
-                        scrumBoardViewModel.handleFailedResponse()
-                    }
-                )
-
-            )
-
-        }
-        else {
-            scrumBoardViewModel.handleNoInternetResponse()
+            getTaskListData()
         }
     }
 

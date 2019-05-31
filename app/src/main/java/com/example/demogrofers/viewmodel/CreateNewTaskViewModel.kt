@@ -6,11 +6,10 @@ import com.example.demogrofers.model.Task
 import com.example.demogrofers.model.TaskResponse
 import com.example.demogrofers.repository.ScrumBoardRepository
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class ScrumBoardViewModel @Inject constructor(val repository: ScrumBoardRepository): ViewModel() {
+class CreateNewTaskViewModel @Inject constructor(val repository: ScrumBoardRepository): ViewModel() {
 
     var progressState: ObservableField<Boolean> = ObservableField(false)
     var noResultState: ObservableField<Boolean> = ObservableField(false)
@@ -22,11 +21,11 @@ class ScrumBoardViewModel @Inject constructor(val repository: ScrumBoardReposito
         resultString.set("No internet Connection")
     }
 
-    fun loadData(): Single<Map<String, ArrayList<Task>>> {
+    fun sendData(taskToSend: Task): Single<TaskResponse> {
         progressState.set(true)
-        return repository.getScrumBoardRepository()
+        return repository.postNewTask(taskToSend)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
     }
 
     fun handleSuccessResponse() {
