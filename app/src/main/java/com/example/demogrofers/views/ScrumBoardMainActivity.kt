@@ -11,7 +11,6 @@ import android.util.Log
 import com.example.demogrofers.ConnectionUtils
 import com.example.demogrofers.R
 import com.example.demogrofers.databinding.ActivityMainBinding
-import com.example.demogrofers.model.Task
 import com.example.demogrofers.utils.FilterStates
 import com.example.demogrofers.viewmodel.ScrumBoardViewModel
 import dagger.android.AndroidInjection
@@ -55,7 +54,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
         activityMainBinding.viewModel = scrumBoardViewModel
 
        // repository = ScrumBoardRepository(ScrumBoardApplication.getRetrofitInstance().create(ScrumBoardApis::class.java))
-        taskListAdapter = TaskListAdapter()
+        taskListAdapter = TaskListAdapter(this, scrumBoardViewModel, disposable)
         activityMainBinding.appBar.mainContent.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         activityMainBinding.appBar.mainContent.recyclerView.adapter = taskListAdapter
 

@@ -4,15 +4,12 @@ import com.example.demogrofers.model.Task
 import com.example.demogrofers.model.TaskResponse
 import com.example.demogrofers.model.TaskToSearch
 import io.reactivex.Single
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ScrumBoardApis {
 
     @Headers(
-        "access_token: 56511384-f662-4188-8f7c-ad941b9bd705",
+        "access_token: f53d0522-34f9-46ed-a05a-052af9771606",
         "Access-Control-Allow-Origin: *",
         "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
     )
@@ -21,7 +18,7 @@ interface ScrumBoardApis {
 
 
     @Headers(
-        "access_token: 56511384-f662-4188-8f7c-ad941b9bd705",
+        "access_token: f53d0522-34f9-46ed-a05a-052af9771606",
         "Access-Control-Allow-Origin: *",
         "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
     )
@@ -29,11 +26,19 @@ interface ScrumBoardApis {
     fun postNewTask(@Body task: Task): Single<TaskResponse>
 
     @Headers(
-        "access_token: 56511384-f662-4188-8f7c-ad941b9bd705",
+        "access_token: f53d0522-34f9-46ed-a05a-052af9771606",
         "Access-Control-Allow-Origin: *",
         "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
     )
     @POST("task-filter/title")
     fun postTaskToSearch(@Body taskToSearch: TaskToSearch): Single<Map<String, ArrayList<TaskResponse>>>
+
+    @Headers(
+        "access_token: f53d0522-34f9-46ed-a05a-052af9771606",
+        "Access-Control-Allow-Origin: *",
+        "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
+    )
+    @DELETE("tasks/{id}")
+    fun deleteTask(@Path("id") id: Long): Single<String>
 
 }

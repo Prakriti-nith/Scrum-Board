@@ -10,4 +10,5 @@ class ScrumBoardRepository @Inject constructor(val scrumBoardApis: ScrumBoardApi
     fun getScrumBoardRepository() = scrumBoardApis.getAllCurrentTasks()
     fun postNewTask(taskToSend: Task) = scrumBoardApis.postNewTask(taskToSend)
     fun postTaskToSearch(taskToSearch: TaskToSearch) = scrumBoardApis.postTaskToSearch(taskToSearch)
+    fun deleteTask(id: Long) = scrumBoardApis.deleteTask(id)
 }

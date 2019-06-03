@@ -37,6 +37,13 @@ class ScrumBoardViewModel @Inject constructor(val repository: ScrumBoardReposito
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun deleteTask(id: Long): Single<String> {
+        progressState.set(true)
+        return repository.deleteTask(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     fun handleSuccessResponse() {
         progressState.set(false)
     }
