@@ -18,10 +18,11 @@ import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import com.example.demogrofers.viewmodel.ViewModelFactory
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-import android.view.KeyEvent
+import android.widget.SearchView
 import com.example.demogrofers.model.TaskToSearch
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import java.util.concurrent.TimeUnit
 
 
 class ScrumBoardMainActivity : AppCompatActivity() {
@@ -113,13 +114,29 @@ class ScrumBoardMainActivity : AppCompatActivity() {
             val intent = Intent(this@ScrumBoardMainActivity, CreateNewTaskActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_NEW_TASK_ACTIVITY)
         }
-        activityMainBinding.appBar.searchet.setOnEditorActionListener { v: TextView, actionId: Int, event: KeyEvent? ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                Log.d("search", "button clicked")
-                postTaskByName(TaskToSearch(activityMainBinding.appBar.searchet.text.toString()))
-                true
-            }
-            false
+        Observable.create(ObservableOnSubscribe<String> { subscriber ->
+            activityMainBinding.appBar.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    subscriber.onNext(newText!!)
+                    postTaskByName(TaskToSearch(newText.toString()))
+                    Log.d("onQueryTextChange", "onQueryTextSubmit: $newText")
+                    return false
+                }
+
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    subscriber.onNext(query!!)
+                    postTaskByName(TaskToSearch(query.toString()))
+                    Log.d("onQueryTextSubmit", "onQueryTextChange: $query")
+                    return false
+                }
+            })
+        })
+        .map { text -> text.toLowerCase().trim() }
+        .debounce(250, TimeUnit.MILLISECONDS)
+        .distinct()
+        .filter { text -> text.isNotBlank() }
+        .subscribe { text ->
+            Log.d("search", "subscriber: $text")
         }
     }
 
