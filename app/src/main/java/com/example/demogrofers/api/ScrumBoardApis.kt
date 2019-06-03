@@ -17,7 +17,7 @@ interface ScrumBoardApis {
         "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
     )
     @GET("tasks")
-    fun getAllCurrentTasks(): Single<Map<String, ArrayList<Task>>>
+    fun getAllCurrentTasks(): Single<Map<String, ArrayList<TaskResponse>>>
 
 
     @Headers(
@@ -34,6 +34,6 @@ interface ScrumBoardApis {
         "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"
     )
     @POST("task-filter/title")
-    fun postTaskToSearch(@Body taskToSearch: TaskToSearch): Single<Map<String, ArrayList<Task>>>
+    fun postTaskToSearch(@Body taskToSearch: TaskToSearch): Single<Map<String, ArrayList<TaskResponse>>>
 
 }

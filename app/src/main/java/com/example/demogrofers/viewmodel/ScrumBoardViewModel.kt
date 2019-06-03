@@ -23,14 +23,14 @@ class ScrumBoardViewModel @Inject constructor(val repository: ScrumBoardReposito
         resultString.set("No internet Connection")
     }
 
-    fun loadData(): Single<Map<String, ArrayList<Task>>> {
+    fun loadData(): Single<Map<String, ArrayList<TaskResponse>>> {
         progressState.set(true)
         return repository.getScrumBoardRepository()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun sendData(taskToSearch: TaskToSearch): Single<Map<String, ArrayList<Task>>> {
+    fun sendData(taskToSearch: TaskToSearch): Single<Map<String, ArrayList<TaskResponse>>> {
         progressState.set(true)
         return repository.postTaskToSearch(taskToSearch)
             .subscribeOn(Schedulers.io())

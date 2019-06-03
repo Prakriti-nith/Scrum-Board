@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.demogrofers.databinding.RecyclerviewItemBinding
 import com.example.demogrofers.model.Task
+import com.example.demogrofers.model.TaskResponse
 
 
 class TaskListAdapter(
-    private var taskList: ArrayList<Task> = ArrayList()
+    private var taskList: ArrayList<TaskResponse> = ArrayList()
 ) : RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
 
 
-    fun setItems(taskLis: ArrayList<Task>?) {
+    fun setItems(taskLis: ArrayList<TaskResponse>?) {
         taskLis?.let {
             taskList.clear()
             taskList.addAll(it)

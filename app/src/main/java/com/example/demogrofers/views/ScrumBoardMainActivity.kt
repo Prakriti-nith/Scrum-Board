@@ -19,6 +19,7 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 import com.example.demogrofers.viewmodel.ViewModelFactory
 import android.widget.SearchView
+import com.example.demogrofers.model.TaskResponse
 import com.example.demogrofers.model.TaskToSearch
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
@@ -83,7 +84,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
                     {
                         scrumBoardViewModel.handleSuccessResponse()
                         Log.d("response", "response received")
-                        val checkedTasksArrayList = ArrayList<Task>()
+                        val checkedTasksArrayList = ArrayList<TaskResponse>()
                         for(mapStatus in it) {
                             if(mapStatus.key.toLowerCase() in checkedStatesStringArray) {
                                 checkedTasksArrayList.addAll(ArrayList(mapStatus.value))
@@ -148,7 +149,7 @@ class ScrumBoardMainActivity : AppCompatActivity() {
                     {
                         scrumBoardViewModel.handleSuccessResponse()
                         Log.d("search", "response received")
-                        val tasksArrayList = ArrayList<Task>()
+                        val tasksArrayList = ArrayList<TaskResponse>()
                         for(mapStatus in it) {
                             if(mapStatus.value.isNotEmpty()) {
                                 tasksArrayList.addAll(ArrayList(mapStatus.value))
