@@ -42,6 +42,9 @@ class ScrumBoardMainActivity : AppCompatActivity() {
     companion object {
         const val REQUEST_CODE_FILTER_ACTIVITY = 9
         const val REQUEST_CODE_NEW_TASK_ACTIVITY = 5
+        const val REQUEST_CODE_UPDATE_TASK = 1
+        const val OLD_TASK_TO_UPDATE = "update task"
+        const val EDIT_TASK = "edit task"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +108,6 @@ class ScrumBoardMainActivity : AppCompatActivity() {
 
     private fun setListener() {
         activityMainBinding.appBar.filterTv.setOnClickListener {
-
             val intent = Intent(this@ScrumBoardMainActivity, FilterStatesActivity::class.java)
             intent.putStringArrayListExtra(FilterStatesActivity.CHECKED_STATES_STRING_ARRAY, checkedStatesStringArray)
             startActivityForResult(intent, REQUEST_CODE_FILTER_ACTIVITY)
@@ -183,6 +185,10 @@ class ScrumBoardMainActivity : AppCompatActivity() {
         }
 
         if(requestCode == REQUEST_CODE_NEW_TASK_ACTIVITY && resultCode == Activity.RESULT_OK) {
+            getTaskListData()
+        }
+
+        if(requestCode == REQUEST_CODE_UPDATE_TASK && resultCode == Activity.RESULT_OK) {
             getTaskListData()
         }
     }

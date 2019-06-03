@@ -10,6 +10,7 @@ import com.example.demogrofers.databinding.RecyclerviewItemBinding
 import com.example.demogrofers.model.TaskResponse
 import com.example.demogrofers.viewmodel.ScrumBoardViewModel
 import io.reactivex.disposables.CompositeDisposable
+import android.content.Intent
 
 
 class TaskListAdapter(
@@ -48,47 +49,29 @@ class TaskListAdapter(
                     .subscribe(
                         {
                             scrumBoardViewModel.handleSuccessResponse()
-                            getTaskListData()
+                            Log.d("delete", ""+ position)
+                            if (position != RecyclerView.NO_POSITION) {
+                                taskList.removeAt(position)
+                                notifyItemRemoved(position)
+                            }
                         },
                         {
                             scrumBoardViewModel.handleFailedResponse()
                             Log.d("response", "" + it)
                         }
                     )
-
                 )
-
             }
             else {
                 scrumBoardViewModel.handleNoInternetResponse()
             }
         }
-    }
-
-    private fun getTaskListData() {
-        if(ConnectionUtils.isNetConnected(context)) {
-            disposable.add(scrumBoardViewModel.loadData()
-                .subscribe(
-                    {
-                        scrumBoardViewModel.handleSuccessResponse()
-                        Log.d("response", "response received")
-                        val checkedTasksArrayList = ArrayList<TaskResponse>()
-                        for(mapStatus in it) {
-//                            if(mapStatus.key.toLowerCase() in checkedStatesStringArray) {
-                                checkedTasksArrayList.addAll(ArrayList(mapStatus.value))
-//                            }
-                        }
-                        setItems(checkedTasksArrayList)
-                    },
-                    {
-                        Log.d("response", " no response" + it)
-                        scrumBoardViewModel.handleFailedResponse()
-                    }
-                )
-            )
-        }
-        else {
-            scrumBoardViewModel.handleNoInternetResponse()
+        recyclerViewItemBinding.editIv.setOnClickListener {
+            val activity = context as ScrumBoardMainActivity
+            val intent = Intent(context, CreateNewTaskActivity::class.java)
+            intent.putExtra(ScrumBoardMainActivity.OLD_TASK_TO_UPDATE, task)
+            intent.putExtra(ScrumBoardMainActivity.EDIT_TASK, true)
+            activity.startActivityForResult(intent, ScrumBoardMainActivity.REQUEST_CODE_UPDATE_TASK)
         }
     }
 

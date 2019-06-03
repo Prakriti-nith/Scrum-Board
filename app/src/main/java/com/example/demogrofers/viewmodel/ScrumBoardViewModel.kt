@@ -9,6 +9,7 @@ import com.example.demogrofers.repository.ScrumBoardRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 class ScrumBoardViewModel @Inject constructor(val repository: ScrumBoardRepository): ViewModel() {
@@ -37,7 +38,7 @@ class ScrumBoardViewModel @Inject constructor(val repository: ScrumBoardReposito
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun deleteTask(id: Long): Single<String> {
+    fun deleteTask(id: Long): Single<retrofit2.Response<Void>> {
         progressState.set(true)
         return repository.deleteTask(id)
             .subscribeOn(Schedulers.io())

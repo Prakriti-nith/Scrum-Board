@@ -29,6 +29,13 @@ class CreateNewTaskViewModel @Inject constructor(val repository: ScrumBoardRepos
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun updateTask(id: Long, task: Task): Single<TaskResponse> {
+        progressState.set(true)
+        return repository.updateTask(id, task)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     fun handleSuccessResponse() {
         progressState.set(false)
     }
